@@ -23,20 +23,17 @@
             <artifactId>javafx-base</artifactId>
             <version>22.0.1</version>
         </dependency>
-
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
             <version>22.0.1</version>
         </dependency>
-
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-graphics </artifactId>
             <version>22.0.1</version>
 
         </dependency>
-
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
@@ -64,6 +61,11 @@
             <groupId>org.jfree</groupId>
             <artifactId>jfreechart</artifactId>
             <version>1.5.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.fyp24064</groupId>
+            <artifactId>terminal-backend</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
