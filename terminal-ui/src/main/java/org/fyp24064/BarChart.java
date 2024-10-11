@@ -1,23 +1,18 @@
 package org.fyp24064;
 
-import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
-import javafx.scene.text.Text;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import org.jfree.chart.*;
 import org.jfree.chart.fx.ChartViewer;
-import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.StandardXYBarPainter;
+import org.jfree.chart.renderer.xy.XYBarRenderer;
 import org.jfree.data.time.Day;
-import org.jfree.data.time.ohlc.OHLCSeries;
-import org.jfree.data.time.ohlc.OHLCSeriesCollection;
-import org.jfree.data.xy.OHLCDataset;
+import org.jfree.data.time.TimeSeries;
+import org.jfree.data.time.TimeSeriesCollection;
+import org.jfree.data.xy.IntervalXYDataset;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -26,7 +21,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class CandlestickChart extends Chart {
+public class BarChart extends Chart {
 
     public static void run(String[] args) {
         launch(args);
@@ -34,7 +29,7 @@ public class CandlestickChart extends Chart {
 
     @Override
     public void start(Stage primaryStage) {
-        dataset_OHLC = createDataset();
+        dataset_category = createDataset();
         constructStage(primaryStage);
     }
 
@@ -48,7 +43,7 @@ public class CandlestickChart extends Chart {
         enterButton.setOnAction(e -> {
             try {
                 if (validateDates(startDate.getText(), endDate.getText())) {
-                    dataset_OHLC = createDataset();
+                    dataset_category = createDataset();
                     viewer.setChart(createChart());
                 }
             } catch (Exception ex) {
@@ -63,19 +58,22 @@ public class CandlestickChart extends Chart {
         root.setStyle("-fx-background-color: #333333;");
 
         primaryStage.setScene(new Scene(root, 1000, 400));
-        primaryStage.setTitle("Candlestick Chart");
+        primaryStage.setTitle("Bar Chart");
         primaryStage.show();
     }
 
     protected JFreeChart createChart() {
-        JFreeChart chart = ChartFactory.createCandlestickChart("BTC", "Date", "Price", dataset_OHLC, false);
+        JFreeChart chart = ChartFactory.createXYBarChart("BTC", "Date", true,"Volume (Billions)", dataset_category);
         chart = styleChart(chart);
+        XYBarRenderer renderer = (XYBarRenderer) chart.getXYPlot().getRenderer();
+        renderer.setBarPainter(new StandardXYBarPainter());
+        renderer.setDefaultSeriesVisibleInLegend(false);
+        renderer.setMargin(0.1);
         return chart;
     }
 
-    private OHLCDataset createDataset() {
-        OHLCSeriesCollection collection = new OHLCSeriesCollection();
-        OHLCSeries series = new OHLCSeries("Stock OHLC");
+    private IntervalXYDataset createDataset() {
+        TimeSeries series = new TimeSeries("Stock Volume", "Date", "Volume");
 
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
@@ -89,22 +87,18 @@ public class CandlestickChart extends Chart {
             while ((line = reader.readLine()) != null) {
                 String[] values = line.split(",");
                 Date date = dateFormat.parse(values[0]);
-                double open = Double.parseDouble(values[1]);
-                double high = Double.parseDouble(values[2]);
-                double low = Double.parseDouble(values[3]);
-                double close = Double.parseDouble(values[4]);
+                double volume = Double.parseDouble(values[6]) / 1E9;
 
                 // check if the date is within the specified range (inclusive)
                 if (!date.before(startDay) && !date.after(endDay)) {
-                    series.add(new Day(date), open, high, low, close);
+                    series.add(new Day(date), volume);
                 }
             }
         } catch (IOException | ParseException e) {
             e.printStackTrace();
         }
 
-        collection.addSeries(series);
-        return collection;
+        return new TimeSeriesCollection(series);
     }
 
 }
