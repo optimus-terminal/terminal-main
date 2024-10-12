@@ -41,6 +41,8 @@ public abstract class Chart extends Application {
         fromLabel.setFill(Color.WHITE);
         Text toLabel = new Text("To: ");
         toLabel.setFill(Color.WHITE);
+        startDateField.setPrefWidth(100);
+        endDateField.setPrefWidth(100);
         inputLayout.getChildren().addAll(fromLabel, startDateField, toLabel, endDateField, enterButton);
         inputLayout.setStyle("-fx-padding: 10; -fx-background-color: #333333; -fx-alignment: center");
         return inputLayout;
