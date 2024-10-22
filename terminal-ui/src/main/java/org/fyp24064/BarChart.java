@@ -57,13 +57,13 @@ public class BarChart extends Chart {
         root.setBottom(createInputLayout(startDate, endDate, enterButton)); // the date range input
         root.setStyle("-fx-background-color: #333333;");
 
-        primaryStage.setScene(new Scene(root, 1000, 400));
+        primaryStage.setScene(new Scene(root, 1000, 800));
         primaryStage.setTitle("Bar Chart");
         primaryStage.show();
     }
 
     protected JFreeChart createChart() {
-        JFreeChart chart = ChartFactory.createXYBarChart("BTC", "Date", true,"Volume (Billions)", dataset_category);
+        JFreeChart chart = ChartFactory.createXYBarChart("BTC-USD", "Date", true,"Volume (Billions)", dataset_category);
         chart = styleChart(chart);
         XYBarRenderer renderer = (XYBarRenderer) chart.getXYPlot().getRenderer();
         renderer.setBarPainter(new StandardXYBarPainter());
