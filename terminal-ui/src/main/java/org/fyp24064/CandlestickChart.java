@@ -79,13 +79,13 @@ public class CandlestickChart extends Chart {
         root.setBottom(bottom);
         root.setStyle("-fx-background-color: #333333;");
 
-        primaryStage.setScene(new Scene(root, 1000, 400));
+        primaryStage.setScene(new Scene(root, 1000, 800));
         primaryStage.setTitle("Candlestick Chart");
         primaryStage.show();
     }
 
     protected JFreeChart createChart() {
-        JFreeChart chart = ChartFactory.createCandlestickChart("BTC", "Date", "Price", dataset_OHLC, false);
+        JFreeChart chart = ChartFactory.createCandlestickChart("BTC-USD", "Date", "Price", dataset_OHLC, false);
         chart = styleChart(chart);
         XYPlot plot = chart.getXYPlot();
         CandlestickRenderer renderer = (CandlestickRenderer) plot.getRenderer();
