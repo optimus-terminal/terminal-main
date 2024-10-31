@@ -17,8 +17,7 @@ public class Tabs extends Application {
     public void start(Stage primaryStage) {
         TabPane tabPane = new TabPane();
         tabPane.getStyleClass().add("floating");
-
-        // TODO: draggable tabs?
+        tabPane.setTabDragPolicy(TabPane.TabDragPolicy.REORDER);
 
         // Control panel for adding new tabs
         Label stockLabel = new Label("Name of stock: ");

@@ -32,12 +32,12 @@ public abstract class Chart {
 
     protected HBox createInputLayout(TextField startDateField, TextField endDateField, Button enterButton) {
         HBox inputLayout = new HBox(10);
-        Text fromLabel = new Text("From: ");
+        Text fromLabel = new Text("From:");
         fromLabel.setFill(Color.WHITE);
-        Text toLabel = new Text("To: ");
+        Text toLabel = new Text("To:");
         toLabel.setFill(Color.WHITE);
-        startDateField.setPrefWidth(100);
-        endDateField.setPrefWidth(100);
+        startDateField.setPrefWidth(90);
+        endDateField.setPrefWidth(90);
         inputLayout.getChildren().addAll(fromLabel, startDateField, toLabel, endDateField, enterButton);
         inputLayout.setStyle("-fx-padding: 10; -fx-background-color: #333333; -fx-alignment: center");
         return inputLayout;
