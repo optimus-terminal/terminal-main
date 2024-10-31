@@ -23,19 +23,10 @@ import java.util.Date;
 
 public class BarChart extends Chart {
 
-    public static void run(String[] args) {
-        launch(args);
-    }
-
     @Override
-    public void start(Stage primaryStage) {
-        dataset_category = createDataset();
-        constructStage(primaryStage);
-    }
-
-    @Override
-    protected void constructStage(Stage primaryStage) {
-        JFreeChart chart = createChart();
+    protected BorderPane constructNode(String stock) {
+        dataset_category = createDataset(stock);
+        JFreeChart chart = createChart(stock);
         ChartViewer viewer = new ChartViewer(chart);
 
         Button enterButton = new Button("Enter");
@@ -43,8 +34,8 @@ public class BarChart extends Chart {
         enterButton.setOnAction(e -> {
             try {
                 if (validateDates(startDate.getText(), endDate.getText())) {
-                    dataset_category = createDataset();
-                    viewer.setChart(createChart());
+                    dataset_category = createDataset(stock);
+                    viewer.setChart(createChart(stock));
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -57,13 +48,11 @@ public class BarChart extends Chart {
         root.setBottom(createInputLayout(startDate, endDate, enterButton)); // the date range input
         root.setStyle("-fx-background-color: #333333;");
 
-        primaryStage.setScene(new Scene(root, 1000, 800));
-        primaryStage.setTitle("Bar Chart");
-        primaryStage.show();
+        return root;
     }
 
-    protected JFreeChart createChart() {
-        JFreeChart chart = ChartFactory.createXYBarChart("BTC-USD", "Date", true,"Volume (Billions)", dataset_category);
+    protected JFreeChart createChart(String stock) {
+        JFreeChart chart = ChartFactory.createXYBarChart(stock, "Date", true,"Volume (Billions)", dataset_category);
         chart = styleChart(chart);
         XYBarRenderer renderer = (XYBarRenderer) chart.getXYPlot().getRenderer();
         renderer.setBarPainter(new StandardXYBarPainter());
@@ -72,8 +61,9 @@ public class BarChart extends Chart {
         return chart;
     }
 
-    private IntervalXYDataset createDataset() {
+    private IntervalXYDataset createDataset(String stock) {
         TimeSeries series = new TimeSeries("Stock Volume", "Date", "Volume");
+        String filePath = filePathPrefix + stock + ".csv";
 
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;

@@ -1,6 +1,5 @@
 package org.fyp24064;
 
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.control.Button;
@@ -35,19 +34,10 @@ public class CandlestickChart extends Chart {
 
     private TextField MAPeriod = new TextField("10");
 
-    public static void run(String[] args) {
-        launch(args);
-    }
-
     @Override
-    public void start(Stage primaryStage) {
-        dataset_OHLC = createDataset();
-        constructStage(primaryStage);
-    }
-
-    @Override
-    protected void constructStage(Stage primaryStage) {
-        JFreeChart chart = createChart();
+    protected BorderPane constructNode(String stock) {
+        dataset_OHLC = createDataset(stock);
+        JFreeChart chart = createChart(stock);
         ChartViewer viewer = new ChartViewer(chart);
 
         Text MALabel = new Text("Moving Average Period (days): ");
@@ -61,8 +51,8 @@ public class CandlestickChart extends Chart {
         enterButton.setOnAction(e -> {
             try {
                 if (validateDates(startDate.getText(), endDate.getText()) && validateMA(MAPeriod.getText())) {
-                    dataset_OHLC = createDataset();
-                    viewer.setChart(createChart());
+                    dataset_OHLC = createDataset(stock);
+                    viewer.setChart(createChart(stock));
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -79,20 +69,18 @@ public class CandlestickChart extends Chart {
         root.setBottom(bottom);
         root.setStyle("-fx-background-color: #333333;");
 
-        primaryStage.setScene(new Scene(root, 1000, 800));
-        primaryStage.setTitle("Candlestick Chart");
-        primaryStage.show();
+        return root;
     }
 
-    protected JFreeChart createChart() {
-        JFreeChart chart = ChartFactory.createCandlestickChart("BTC-USD", "Date", "Price", dataset_OHLC, false);
+    protected JFreeChart createChart(String stock) {
+        JFreeChart chart = ChartFactory.createCandlestickChart(stock, "Date", "Price", dataset_OHLC, false);
         chart = styleChart(chart);
         XYPlot plot = chart.getXYPlot();
         CandlestickRenderer renderer = (CandlestickRenderer) plot.getRenderer();
         renderer.setAutoWidthMethod(CandlestickRenderer.WIDTHMETHOD_SMALLEST);
 
         // plotting n-day moving average on top (adj close)
-        XYDataset MAdataset = createMADataset();
+        XYDataset MAdataset = createMADataset(stock);
         MAdataset = MovingAverage.createMovingAverage(MAdataset, "10d-MA", Integer.parseInt(MAPeriod.getText())*24*60*60*1000L, 0L);
         plot.setDataset(1, MAdataset);
         plot.setRenderer(1, new StandardXYItemRenderer());
@@ -100,9 +88,10 @@ public class CandlestickChart extends Chart {
         return chart;
     }
 
-    private OHLCDataset createDataset() {
+    private OHLCDataset createDataset(String stock) {
         OHLCSeriesCollection collection = new OHLCSeriesCollection();
         OHLCSeries series = new OHLCSeries("Stock OHLC");
+        String filePath = filePathPrefix + stock + ".csv";
 
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
@@ -134,9 +123,10 @@ public class CandlestickChart extends Chart {
         return collection;
     }
 
-    private XYDataset createMADataset() {
+    private XYDataset createMADataset(String stock) {
         TimeSeriesCollection collection = new TimeSeriesCollection();
         TimeSeries series = new TimeSeries("Stock MA");
+        String filePath = filePathPrefix + stock + ".csv";
 
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;

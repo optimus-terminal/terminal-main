@@ -1,6 +1,7 @@
 package org.fyp24064;
 
 import javafx.application.Application;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -18,22 +19,16 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public abstract class Chart extends Application {
+public abstract class Chart {
 
-    public static void run(String[] args) {
-        launch(args);
-    }
-
-    // only for local testing now
-    protected final String filePath = "./terminal-ui/src/main/java/org/fyp24064/BTC_OHLC.csv";
-    protected TextField startDate = new TextField("2023-10-06");
-    protected TextField endDate = new TextField("2024-10-06");
+    // only for local testing now, will replace with data from API
+    protected final String filePathPrefix = "./terminal-ui/src/main/resources/";
+    protected TextField startDate = new TextField("2023-10-30");
+    protected TextField endDate = new TextField("2024-10-30");
     protected OHLCDataset dataset_OHLC;
     protected IntervalXYDataset dataset_category;
 
-    public abstract void start(Stage primaryStage);
-
-    protected abstract void constructStage(Stage primaryStage);
+    protected abstract Node constructNode(String stock);
 
     protected HBox createInputLayout(TextField startDateField, TextField endDateField, Button enterButton) {
         HBox inputLayout = new HBox(10);
@@ -48,7 +43,7 @@ public abstract class Chart extends Application {
         return inputLayout;
     }
 
-    protected abstract JFreeChart createChart();
+    protected abstract JFreeChart createChart(String stock);
 
     protected JFreeChart styleChart(JFreeChart chart) {
         // dark mode
