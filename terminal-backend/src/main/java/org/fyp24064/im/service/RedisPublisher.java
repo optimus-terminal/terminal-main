@@ -1,4 +1,4 @@
-package org.fyp24064.service;
+package org.fyp24064.im.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;

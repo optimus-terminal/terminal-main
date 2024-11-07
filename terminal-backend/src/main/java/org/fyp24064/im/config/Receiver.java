@@ -1,9 +1,8 @@
-package org.fyp24064.config;
+package org.fyp24064.im.config;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.fyp24064.model.ChatMessage;
+import org.fyp24064.im.model.ChatMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

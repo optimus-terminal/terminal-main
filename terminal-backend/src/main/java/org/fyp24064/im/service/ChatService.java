@@ -1,4 +1,4 @@
-package org.fyp24064.service;
+package org.fyp24064.im.service;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

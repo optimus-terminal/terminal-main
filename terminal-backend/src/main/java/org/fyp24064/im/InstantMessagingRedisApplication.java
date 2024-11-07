@@ -1,9 +1,9 @@
-package org.fyp24064;
+package org.fyp24064.im;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.Resource;
-import org.fyp24064.config.Receiver;
-import org.fyp24064.model.ChatMessage;
+import org.fyp24064.im.config.Receiver;
+import org.fyp24064.im.model.ChatMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ public class InstantMessagingRedisApplication {
     private Receiver receiver;
     @EventListener(ApplicationReadyEvent.class)
     public void sendMessage() throws Exception {
-        ChatMessage chatMessage = new ChatMessage("123123", "123", "chat", "How is it going?");
+        ChatMessage chatMessage = new ChatMessage(123123, "123", "chat, How is it going?", "123");
         ObjectMapper objectMapper = new ObjectMapper();
         // Dependency Injection does not work on static methods
         while (receiver.getCount() == 0) {

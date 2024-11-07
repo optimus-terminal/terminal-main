@@ -1,4 +1,4 @@
-package org.fyp24064.controller;
+package org.fyp24064.im.controller;
 
 public class RedisPublisherController {
 
