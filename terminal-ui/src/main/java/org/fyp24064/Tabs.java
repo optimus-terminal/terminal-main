@@ -9,15 +9,16 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.util.Objects;
+import com.panemu.tiwulfx.control.dock.DetachableTabPane;
 
 public class Tabs extends Application {
+    private DetachableTabPane tabPane;
     public static void run(String[] args) { launch(args); }
 
     @Override
     public void start(Stage primaryStage) {
-        TabPane tabPane = new TabPane();
-        tabPane.getStyleClass().add("floating");
-        tabPane.setTabDragPolicy(TabPane.TabDragPolicy.REORDER);
+        tabPane = new DetachableTabPane();
+        tabPane.getStyleClass().add(DetachableTabPane.STYLE_CLASS_FLOATING);
 
         // Control panel for adding new tabs
         Label stockLabel = new Label("Name of stock: ");
@@ -82,9 +83,11 @@ public class Tabs extends Application {
         HBox controls = new HBox(stockLabel, stockName, chartLabel, chartName, addTabButton);
         controls.setStyle("-fx-background-color: #333333; -fx-alignment: center;");
 
-        VBox screen = new VBox(controls, tabPane);
+        SplitPane sp = new SplitPane(tabPane);
+        sp.setStyle("-fx-background-color: #333333;");
+        VBox screen = new VBox(controls, sp);
         screen.setStyle("-fx-padding: 10; -fx-background-color: #333333;");
-        VBox.setVgrow(tabPane, Priority.ALWAYS);
+        VBox.setVgrow(sp, Priority.ALWAYS);
 
         primaryStage.setScene(new Scene(screen, 1000, 600));
         primaryStage.setTitle("Optimus");
