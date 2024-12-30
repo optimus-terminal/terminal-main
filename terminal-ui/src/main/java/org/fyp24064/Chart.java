@@ -1,6 +1,5 @@
 package org.fyp24064;
 
-import javafx.application.Application;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -8,13 +7,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.scene.paint.Color;
-
-import javafx.stage.Stage;
 import org.jfree.chart.*;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.xy.IntervalXYDataset;
 import org.jfree.data.xy.OHLCDataset;
-
+import org.jfree.data.xy.XYDataset;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -23,25 +20,10 @@ public abstract class Chart {
 
     // only for local testing now, will replace with data from API
     protected final String filePathPrefix = "./terminal-ui/src/main/resources/";
-    protected TextField startDate = new TextField("2023-10-30");
-    protected TextField endDate = new TextField("2024-10-30");
-    protected OHLCDataset dataset_OHLC;
-    protected IntervalXYDataset dataset_category;
+    protected String startDate = "2023-10-30";
+    protected String endDate = "2024-10-30";
 
-    protected abstract Node constructNode(String stock);
-
-    protected HBox createInputLayout(TextField startDateField, TextField endDateField, Button enterButton) {
-        HBox inputLayout = new HBox(10);
-        Text fromLabel = new Text("From:");
-        fromLabel.setFill(Color.WHITE);
-        Text toLabel = new Text("To:");
-        toLabel.setFill(Color.WHITE);
-        startDateField.setPrefWidth(90);
-        endDateField.setPrefWidth(90);
-        inputLayout.getChildren().addAll(fromLabel, startDateField, toLabel, endDateField, enterButton);
-        inputLayout.setStyle("-fx-padding: 10; -fx-background-color: #333333; -fx-alignment: center");
-        return inputLayout;
-    }
+    protected abstract Node constructNode(String[] args);
 
     protected abstract JFreeChart createChart(String stock);
 
@@ -62,32 +44,5 @@ public abstract class Chart {
         plot.setDomainPannable(true);
         plot.setRangePannable(true);
         return chart;
-    }
-
-    protected boolean validateDates(String startDateStr, String endDateStr) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        dateFormat.setLenient(false); // enforce strict parsing
-
-        try {
-            Date startDateParsed = dateFormat.parse(startDateStr);
-            Date endDateParsed = dateFormat.parse(endDateStr);
-
-            if (startDateParsed.after(endDateParsed)) {
-                showAlert("Invalid Dates", "Start date must be before or equal to end date.");
-                return false;
-            }
-            return true;
-        } catch (ParseException e) {
-            showAlert("Invalid Date Format", "Please use the format: YYYY-MM-DD");
-            return false;
-        }
-    }
-
-    protected void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 }

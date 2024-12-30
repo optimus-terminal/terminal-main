@@ -1,18 +1,15 @@
 package org.fyp24064;
 
 import javafx.scene.layout.BorderPane;
-import org.jfree.chart.*;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.JFreeChart;
 import org.jfree.chart.fx.ChartViewer;
 import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.xy.CandlestickRenderer;
 import org.jfree.chart.renderer.xy.StandardXYItemRenderer;
 import org.jfree.data.time.Day;
 import org.jfree.data.time.MovingAverage;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
-import org.jfree.data.time.ohlc.OHLCSeries;
-import org.jfree.data.time.ohlc.OHLCSeriesCollection;
-import org.jfree.data.xy.OHLCDataset;
 import org.jfree.data.xy.XYDataset;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -21,15 +18,15 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class CandlestickChart extends Chart {
+public class LineChart extends Chart{
     private String MAPeriod;
-    private OHLCDataset dataset_OHLC;
+    private XYDataset dataset_adjClosed;
 
     @Override
     protected BorderPane constructNode(String[] args) {
         String stock = args[0];
         MAPeriod = (args.length > 1)? args[1] : "0";
-        dataset_OHLC = createDataset(stock);
+        dataset_adjClosed = createDataset(stock);
         JFreeChart chart = createChart(stock);
         ChartViewer viewer = new ChartViewer(chart);
 
@@ -41,11 +38,10 @@ public class CandlestickChart extends Chart {
     }
 
     protected JFreeChart createChart(String stock) {
-        JFreeChart chart = ChartFactory.createCandlestickChart(stock, "Date", "Price", dataset_OHLC, false);
+        JFreeChart chart = ChartFactory.createXYLineChart(stock, "Date", "Price", dataset_adjClosed);
+        chart.removeLegend();
         chart = styleChart(chart);
         XYPlot plot = chart.getXYPlot();
-        CandlestickRenderer renderer = (CandlestickRenderer) plot.getRenderer();
-        renderer.setAutoWidthMethod(CandlestickRenderer.WIDTHMETHOD_SMALLEST);
 
         // plotting n-day moving average on top (adj close)
         if (Integer.parseInt(MAPeriod) > 0) {
@@ -58,15 +54,14 @@ public class CandlestickChart extends Chart {
         return chart;
     }
 
-    private OHLCDataset createDataset(String stock) {
-        OHLCSeriesCollection collection = new OHLCSeriesCollection();
-        OHLCSeries series = new OHLCSeries("Stock OHLC");
+    private XYDataset createDataset(String stock) {
+        TimeSeriesCollection collection = new TimeSeriesCollection();
+        TimeSeries series = new TimeSeries("Stock adjClosed");
         String filePath = filePathPrefix + stock + ".csv";
 
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            // skip header
             reader.readLine();
 
             Date startDay = dateFormat.parse(startDate);
@@ -75,14 +70,10 @@ public class CandlestickChart extends Chart {
             while ((line = reader.readLine()) != null) {
                 String[] values = line.split(",");
                 Date date = dateFormat.parse(values[0]);
-                double open = Double.parseDouble(values[1]);
-                double high = Double.parseDouble(values[2]);
-                double low = Double.parseDouble(values[3]);
-                double close = Double.parseDouble(values[4]);
+                double adjClosed = Double.parseDouble(values[5]);
 
-                // check if the date is within the specified range (inclusive)
                 if (!date.before(startDay) && !date.after(endDay)) {
-                    series.add(new Day(date), open, high, low, close);
+                    series.add(new Day(date), adjClosed);
                 }
             }
         } catch (IOException | ParseException e) {
@@ -112,7 +103,6 @@ public class CandlestickChart extends Chart {
                 Date date = dateFormat.parse(values[0]);
                 double adj_close = Double.parseDouble(values[5]);
 
-                // check if the date is within the specified range (inclusive)
                 if (!date.before(startDay) && !date.after(endDay)) {
                     series.add(new Day(date), adj_close);
                 }
@@ -124,5 +114,4 @@ public class CandlestickChart extends Chart {
         collection.addSeries(series);
         return collection;
     }
-
 }

@@ -1,0 +1,35 @@
+.button {
+    -fx-background-color: #424242;
+    -fx-text-fill: white;
+}
+
+.combo-box {
+    -fx-background-color: #424242;
+    -fx-text-fill: white;
+}
+
+.input {
+    -fx-background-color: #424242;
+    -fx-pref-width: 5000;
+    -fx-text-fill: white;
+}
+
+.label {
+    -fx-text-fill: white;
+}
+
+.list-cell {
+    -fx-background-color: #424242;
+    -fx-text-fill: white;
+}
+
+.pane {
+    -fx-background-color: #333333;
+    -fx-alignment: center;
+    -fx-padding: 5;
+}
+
+.tab {
+    -fx-background-color: #424242;
+    -fx-text-base-color: white;
+}

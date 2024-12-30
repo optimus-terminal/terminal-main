@@ -1,18 +1,25 @@
 package org.fyp24064;
 
 import javafx.application.Application;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
-import java.util.Objects;
 import com.panemu.tiwulfx.control.dock.DetachableTabPane;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Set;
 
 public class Tabs extends Application {
     private DetachableTabPane tabPane;
+    private TextField input;
+
     public static void run(String[] args) { launch(args); }
 
     @Override
@@ -20,78 +27,100 @@ public class Tabs extends Application {
         tabPane = new DetachableTabPane();
         tabPane.getStyleClass().add(DetachableTabPane.STYLE_CLASS_FLOATING);
 
-        // Control panel for adding new tabs
-        Label stockLabel = new Label("Name of stock: ");
-        stockLabel.setStyle("-fx-text-fill: white;");
-        ComboBox<String> stockName = new ComboBox<>();
-        stockName.getItems().addAll(
-                "AAPL", "BTC-USD", "ETH-USD", "GOOG", "INTC", "NVDA", "TSLA"
-        );
-        stockName.setStyle("-fx-background-color: #424242;");
-        stockName.setCellFactory(stringListView -> new ListCell<>() {
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-                setText(item);
-                setStyle("-fx-background-color: #424242; -fx-text-fill: white;");
-            }
-        });
-        stockName.setButtonCell(new ListCell<>() {
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-                setText(item);
-                setStyle("-fx-background-color: #424242; -fx-text-fill: white;");
-            }
-        });
-        Label chartLabel = new Label("Type of chart: ");
-        chartLabel.setStyle("-fx-text-fill: white;");
-        ComboBox<String> chartName = new ComboBox<>();
-        chartName.getItems().addAll(
-                "Candlestick Chart (OHLC)", "Bar Chart (Volume)"
-        );
-        chartName.setStyle("-fx-background-color: #424242;");
-        chartName.setCellFactory(stringListView -> new ListCell<>() {
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-                setText(item);
-                setStyle("-fx-background-color: #424242; -fx-text-fill: white;");
-            }
-        });
-        chartName.setButtonCell(new ListCell<>() {
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-                setText(item);
-                setStyle("-fx-background-color: #424242; -fx-text-fill: white;");
-            }
-        });
-        Button addTabButton = new Button("Create tab");
-        addTabButton.setStyle("-fx-background-color: #424242; -fx-text-fill: white;");
-        addTabButton.setOnAction(actionEvent -> {
-            Tab tab = new Tab(stockName.getValue() + " " + chartName.getValue(),
-                    (Objects.equals(chartName.getValue(), "Candlestick Chart (OHLC)"))?
-                            new CandlestickChart().constructNode(stockName.getValue()) :
-                            new BarChart().constructNode(stockName.getValue())
-            );
-            tab.setStyle("-fx-background-color: #424242; -fx-text-base-color: white;");
-            tabPane.getTabs().add(tab);
-            tabPane.getSelectionModel().selectLast();
-        });
-
-        HBox controls = new HBox(stockLabel, stockName, chartLabel, chartName, addTabButton);
-        controls.setStyle("-fx-background-color: #333333; -fx-alignment: center;");
+        HBox controls = createControls();
+        controls.getStyleClass().add("pane");
 
         SplitPane sp = new SplitPane(tabPane);
-        sp.setStyle("-fx-background-color: #333333;");
+        sp.getStyleClass().add("pane");
         VBox screen = new VBox(controls, sp);
-        screen.setStyle("-fx-padding: 10; -fx-background-color: #333333;");
+        screen.getStyleClass().add("pane");
         VBox.setVgrow(sp, Priority.ALWAYS);
 
-        primaryStage.setScene(new Scene(screen, 1000, 600));
+        Scene scene = new Scene(screen, 1000, 600);
+        scene.getStylesheets().add("stylesheet.css");
+
+        primaryStage.setScene(scene);
         primaryStage.setTitle("Optimus");
         primaryStage.show();
 
+    }
+
+    private HBox createControls() {
+        input = new TextField();
+        input.getStyleClass().add("input");
+        input.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.ENTER) { addTab(input.getText().split(" ")); }
+        });
+        return new HBox(input);
+    }
+
+    private void addTab(String[] args) {
+        String tabName;
+        Node tabContent;
+        Set<String> stocks = Set.of("AAPL", "BTC-USD", "ETH-USD", "GOOG", "INTC", "NVDA", "TSLA");
+
+        if (!args[0].equals("im") && !stocks.contains(args[1].toUpperCase())) {
+            input.selectAll();
+            return;
+        }
+
+        if (args.length == 4) {
+            if (args[0].equals("line")) {
+                String stock = args[1].toUpperCase();
+                String MAPeriod = args[3];
+                tabName = stock + " Closed " + MAPeriod + "d-MA";
+                tabContent = new LineChart().constructNode(new String[] {stock, MAPeriod});
+            }
+            else if (args[0].equals("candle")) {
+                String stock = args[1].toUpperCase();
+                String MAPeriod = args[3];
+                tabName = stock + " OHLC " + MAPeriod + "d-MA";
+                tabContent = new CandlestickChart().constructNode(new String[] {stock, MAPeriod});
+            }
+            else {
+                input.selectAll();
+                return;
+            }
+        }
+        else if (args.length == 2) {
+            if (args[0].equals("line")) {
+                String stock = args[1].toUpperCase();
+                tabName = stock + " Closed";
+                tabContent = new LineChart().constructNode(new String[] {stock});
+            }
+            else if (args[0].equals("candle")) {
+                String stock = args[1].toUpperCase();
+                tabName = stock + " OHLC";
+                tabContent = new CandlestickChart().constructNode(new String[] {stock});
+            }
+            else if (args[0].equals("bar")) {
+                String stock = args[1].toUpperCase();
+                tabName = stock + " Volume";
+                tabContent = new BarChart().constructNode(new String[] {stock});
+            }
+            else if (args[0].equals("im")) {
+                String receiver = args[1];
+                tabName = "IM: " + receiver;
+                tabContent = new Text("Instant Messaging Placeholder");
+            }
+            else if (args[0].equals("news")) {
+                String stock = args[1].toUpperCase();
+                tabName = stock + " News";
+                tabContent = new Text("News Placeholder");
+            }
+            else {
+                input.selectAll();
+                return;
+            }
+        }
+        else {
+            input.selectAll();
+            return;
+        }
+
+        Tab tab = new Tab(tabName, tabContent);
+        tab.getStyleClass().add("tab");
+        tabPane.getTabs().add(tab);
+        tabPane.getSelectionModel().selectLast();
     }
 }
