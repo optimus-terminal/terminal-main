@@ -42,7 +42,6 @@ public class Tabs extends Application {
         primaryStage.setScene(scene);
         primaryStage.setTitle("Optimus");
         primaryStage.show();
-
     }
 
     private HBox createControls() {
@@ -59,21 +58,25 @@ public class Tabs extends Application {
         Node tabContent;
         Set<String> stocks = Set.of("AAPL", "BTC-USD", "ETH-USD", "GOOG", "INTC", "NVDA", "TSLA");
 
-        if (!args[0].equals("im") && !stocks.contains(args[1].toUpperCase())) {
+        if (
+                args.length < 2 || args.length > 3
+                || (!args[0].equals("im") && !stocks.contains(args[1].toUpperCase()))
+                || (args.length == 3 && !args[2].matches("\\d+"))
+        ) {
             input.selectAll();
             return;
         }
 
-        if (args.length == 4) {
+        if (args.length == 3) {
             if (args[0].equals("line")) {
                 String stock = args[1].toUpperCase();
-                String MAPeriod = args[3];
+                String MAPeriod = args[2];
                 tabName = stock + " Closed " + MAPeriod + "d-MA";
                 tabContent = new LineChart().constructNode(new String[] {stock, MAPeriod});
             }
             else if (args[0].equals("candle")) {
                 String stock = args[1].toUpperCase();
-                String MAPeriod = args[3];
+                String MAPeriod = args[2];
                 tabName = stock + " OHLC " + MAPeriod + "d-MA";
                 tabContent = new CandlestickChart().constructNode(new String[] {stock, MAPeriod});
             }
@@ -82,40 +85,38 @@ public class Tabs extends Application {
                 return;
             }
         }
-        else if (args.length == 2) {
-            if (args[0].equals("line")) {
-                String stock = args[1].toUpperCase();
-                tabName = stock + " Closed";
-                tabContent = new LineChart().constructNode(new String[] {stock});
-            }
-            else if (args[0].equals("candle")) {
-                String stock = args[1].toUpperCase();
-                tabName = stock + " OHLC";
-                tabContent = new CandlestickChart().constructNode(new String[] {stock});
-            }
-            else if (args[0].equals("bar")) {
-                String stock = args[1].toUpperCase();
-                tabName = stock + " Volume";
-                tabContent = new BarChart().constructNode(new String[] {stock});
-            }
-            else if (args[0].equals("im")) {
-                String receiver = args[1];
-                tabName = "IM: " + receiver;
-                tabContent = new Text("Instant Messaging Placeholder");
-            }
-            else if (args[0].equals("news")) {
-                String stock = args[1].toUpperCase();
-                tabName = stock + " News";
-                tabContent = new Text("News Placeholder");
-            }
-            else {
-                input.selectAll();
-                return;
-            }
-        }
         else {
-            input.selectAll();
-            return;
+            switch (args[0]) {
+                case "line" -> {
+                    String stock = args[1].toUpperCase();
+                    tabName = stock + " Closed";
+                    tabContent = new LineChart().constructNode(new String[] {stock});
+                }
+                case "candle" -> {
+                    String stock = args[1].toUpperCase();
+                    tabName = stock + " OHLC";
+                    tabContent = new CandlestickChart().constructNode(new String[] {stock});
+                }
+                case "bar" -> {
+                    String stock = args[1].toUpperCase();
+                    tabName = stock + " Volume";
+                    tabContent = new BarChart().constructNode(new String[] {stock});
+                }
+                case "im" -> {
+                    String receiver = args[1];
+                    tabName = "IM: " + receiver;
+                    tabContent = new Text("Instant Messaging Placeholder");
+                }
+                case "news" -> {
+                    String stock = args[1].toUpperCase();
+                    tabName = stock + " News";
+                    tabContent = new Text("News Placeholder");
+                }
+                default -> {
+                    input.selectAll();
+                    return;
+                }
+            }
         }
 
         Tab tab = new Tab(tabName, tabContent);

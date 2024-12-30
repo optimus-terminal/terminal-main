@@ -92,7 +92,6 @@ public class LineChart extends Chart{
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            // skip header
             reader.readLine();
 
             Date startDay = dateFormat.parse(startDate);

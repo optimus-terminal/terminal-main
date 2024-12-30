@@ -58,7 +58,6 @@ public class BarChart extends Chart {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            // skip header
             reader.readLine();
 
             Date startDay = dateFormat.parse(startDate);
@@ -69,7 +68,6 @@ public class BarChart extends Chart {
                 Date date = dateFormat.parse(values[0]);
                 double volume = Double.parseDouble(values[6]) / 1E9;
 
-                // check if the date is within the specified range (inclusive)
                 if (!date.before(startDay) && !date.after(endDay)) {
                     series.add(new Day(date), volume);
                 }

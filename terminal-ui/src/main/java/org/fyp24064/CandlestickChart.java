@@ -66,7 +66,6 @@ public class CandlestickChart extends Chart {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            // skip header
             reader.readLine();
 
             Date startDay = dateFormat.parse(startDate);
@@ -80,7 +79,6 @@ public class CandlestickChart extends Chart {
                 double low = Double.parseDouble(values[3]);
                 double close = Double.parseDouble(values[4]);
 
-                // check if the date is within the specified range (inclusive)
                 if (!date.before(startDay) && !date.after(endDay)) {
                     series.add(new Day(date), open, high, low, close);
                 }
@@ -101,7 +99,6 @@ public class CandlestickChart extends Chart {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            // skip header
             reader.readLine();
 
             Date startDay = dateFormat.parse(startDate);
@@ -112,7 +109,6 @@ public class CandlestickChart extends Chart {
                 Date date = dateFormat.parse(values[0]);
                 double adj_close = Double.parseDouble(values[5]);
 
-                // check if the date is within the specified range (inclusive)
                 if (!date.before(startDay) && !date.after(endDay)) {
                     series.add(new Day(date), adj_close);
                 }
