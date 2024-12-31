@@ -28,7 +28,7 @@ public class CandlestickChart extends Chart {
     @Override
     protected BorderPane constructNode(String[] args) {
         String stock = args[0];
-        MAPeriod = (args.length > 1)? args[1] : "0";
+        MAPeriod = (args.length > 1) ? args[1] : "0";
         dataset_OHLC = createDataset(stock);
         JFreeChart chart = createChart(stock);
         ChartViewer viewer = new ChartViewer(chart);
@@ -90,35 +90,4 @@ public class CandlestickChart extends Chart {
         collection.addSeries(series);
         return collection;
     }
-
-    private XYDataset createMADataset(String stock) {
-        TimeSeriesCollection collection = new TimeSeriesCollection();
-        TimeSeries series = new TimeSeries("Stock MA");
-        String filePath = filePathPrefix + stock + ".csv";
-
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            reader.readLine();
-
-            Date startDay = dateFormat.parse(startDate);
-            Date endDay = dateFormat.parse(endDate);
-
-            while ((line = reader.readLine()) != null) {
-                String[] values = line.split(",");
-                Date date = dateFormat.parse(values[0]);
-                double adj_close = Double.parseDouble(values[5]);
-
-                if (!date.before(startDay) && !date.after(endDay)) {
-                    series.add(new Day(date), adj_close);
-                }
-            }
-        } catch (IOException | ParseException e) {
-            e.printStackTrace();
-        }
-
-        collection.addSeries(series);
-        return collection;
-    }
-
 }

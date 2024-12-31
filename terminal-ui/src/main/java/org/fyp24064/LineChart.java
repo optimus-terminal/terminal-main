@@ -38,7 +38,7 @@ public class LineChart extends Chart{
     }
 
     protected JFreeChart createChart(String stock) {
-        JFreeChart chart = ChartFactory.createXYLineChart(stock, "Date", "Price", dataset_adjClosed);
+        JFreeChart chart = ChartFactory.createTimeSeriesChart(stock, "Date", "Price", dataset_adjClosed);
         chart.removeLegend();
         chart = styleChart(chart);
         XYPlot plot = chart.getXYPlot();
@@ -74,36 +74,6 @@ public class LineChart extends Chart{
 
                 if (!date.before(startDay) && !date.after(endDay)) {
                     series.add(new Day(date), adjClosed);
-                }
-            }
-        } catch (IOException | ParseException e) {
-            e.printStackTrace();
-        }
-
-        collection.addSeries(series);
-        return collection;
-    }
-
-    private XYDataset createMADataset(String stock) {
-        TimeSeriesCollection collection = new TimeSeriesCollection();
-        TimeSeries series = new TimeSeries("Stock MA");
-        String filePath = filePathPrefix + stock + ".csv";
-
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            reader.readLine();
-
-            Date startDay = dateFormat.parse(startDate);
-            Date endDay = dateFormat.parse(endDate);
-
-            while ((line = reader.readLine()) != null) {
-                String[] values = line.split(",");
-                Date date = dateFormat.parse(values[0]);
-                double adj_close = Double.parseDouble(values[5]);
-
-                if (!date.before(startDay) && !date.after(endDay)) {
-                    series.add(new Day(date), adj_close);
                 }
             }
         } catch (IOException | ParseException e) {

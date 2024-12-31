@@ -9,9 +9,16 @@ import javafx.scene.text.Text;
 import javafx.scene.paint.Color;
 import org.jfree.chart.*;
 import org.jfree.chart.plot.XYPlot;
+import org.jfree.data.time.Day;
+import org.jfree.data.time.TimeSeries;
+import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.xy.IntervalXYDataset;
 import org.jfree.data.xy.OHLCDataset;
 import org.jfree.data.xy.XYDataset;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -44,5 +51,35 @@ public abstract class Chart {
         plot.setDomainPannable(true);
         plot.setRangePannable(true);
         return chart;
+    }
+
+    protected XYDataset createMADataset(String stock) {
+        TimeSeriesCollection collection = new TimeSeriesCollection();
+        TimeSeries series = new TimeSeries("Stock MA");
+        String filePath = filePathPrefix + stock + ".csv";
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            reader.readLine();
+
+            Date startDay = dateFormat.parse(startDate);
+            Date endDay = dateFormat.parse(endDate);
+
+            while ((line = reader.readLine()) != null) {
+                String[] values = line.split(",");
+                Date date = dateFormat.parse(values[0]);
+                double adj_close = Double.parseDouble(values[5]);
+
+                if (!date.before(startDay) && !date.after(endDay)) {
+                    series.add(new Day(date), adj_close);
+                }
+            }
+        } catch (IOException | ParseException e) {
+            e.printStackTrace();
+        }
+
+        collection.addSeries(series);
+        return collection;
     }
 }
