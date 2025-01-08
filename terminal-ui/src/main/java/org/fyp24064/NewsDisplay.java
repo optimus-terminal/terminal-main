@@ -28,7 +28,7 @@ public class NewsDisplay {
                 newsCount++;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             return null;
         }
 

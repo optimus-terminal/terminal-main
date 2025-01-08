@@ -17,7 +17,7 @@ public class BarChart extends Chart {
     @Override
     protected BorderPane constructNode(String[] args) {
         String stock = args[0];
-        dataset_bar = createDataset(stock, "1d");
+        dataset_bar = createDataset(stock, "1y");
         if (dataset_bar == null) {
             return null;
         }

@@ -52,7 +52,7 @@ public class StockService {
                 return stockNews.getResults();
             });
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             return null;
         }
     }

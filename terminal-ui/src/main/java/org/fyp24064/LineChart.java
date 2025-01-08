@@ -17,7 +17,7 @@ public class LineChart extends Chart {
     protected BorderPane constructNode(String[] args) {
         String stock = args[0];
         MAPeriod = (args.length > 1) ? args[1] : "0";
-        dataset_Closed = createClosedDataset(stock, "1d");
+        dataset_Closed = createClosedDataset(stock, "1y");
         if (dataset_Closed == null) {
             return null;
         }
@@ -39,7 +39,7 @@ public class LineChart extends Chart {
 
         // plotting n-day moving average on top (adj close)
         if (Integer.parseInt(MAPeriod) > 0) {
-            XYDataset MAdataset = createClosedDataset(stock, "1d");
+            XYDataset MAdataset = createClosedDataset(stock, "1y");
             MAdataset = MovingAverage.createMovingAverage(MAdataset, MAPeriod + "d-MA", Integer.parseInt(MAPeriod) * 24 * 60 * 60 * 1000L, 0L);
             plot.setDataset(1, MAdataset);
             plot.setRenderer(1, new StandardXYItemRenderer());
