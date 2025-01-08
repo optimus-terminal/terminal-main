@@ -12,10 +12,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import com.panemu.tiwulfx.control.dock.DetachableTabPane;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Set;
-
 public class Tabs extends Application {
     private DetachableTabPane tabPane;
     private TextField input;
@@ -56,11 +52,10 @@ public class Tabs extends Application {
     private void addTab(String[] args) {
         String tabName;
         Node tabContent;
-        Set<String> stocks = Set.of("AAPL", "BTC-USD", "ETH-USD", "GOOG", "INTC", "NVDA", "TSLA");
 
-        if (args.length < 2 || args.length > 3
-                || (!args[0].equals("im") && !stocks.contains(args[1].toUpperCase()))
-                || (args.length == 3 && !args[2].matches("\\d+"))
+        if ((args.length < 2 || args.length > 3
+                || (args.length == 3 && !args[2].matches("\\d+")))
+                && (!args[0].equals("im"))
         ) {
             input.selectAll();
             return;
@@ -90,7 +85,7 @@ public class Tabs extends Application {
                 }
                 break;
             case "bar":
-                tabName = arg + " Volume " + MAPeriod + "d-MA";
+                tabName = arg + " Volume";
                 tabContent = new BarChart().constructNode(new String[] {arg});
                 break;
             case "im":
@@ -99,11 +94,16 @@ public class Tabs extends Application {
                 break;
             case "news":
                 tabName = arg + " News";
-                tabContent = new Text("News Placeholder");
+                tabContent = new NewsDisplay().constructNode(arg);
                 break;
             default:
                 input.selectAll();
                 return;
+        }
+
+        if (tabContent == null) {
+            input.selectAll();
+            return;
         }
 
         Tab tab = new Tab(tabName, tabContent);

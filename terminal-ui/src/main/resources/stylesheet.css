@@ -18,14 +18,23 @@
     -fx-text-fill: white;
 }
 
-.list-cell {
+.entry {
+    -fx-background-color: #333333;
+    -fx-padding: 5;
+    -fx-fill-width: true;
+}
+
+.news-content {
     -fx-background-color: #424242;
     -fx-text-fill: white;
+    -fx-wrap-text: true;
+    -fx-padding: 5;
 }
 
 .pane {
     -fx-background-color: #333333;
     -fx-alignment: center;
+    -fx-fill-width: true;
     -fx-padding: 5;
 }
 
