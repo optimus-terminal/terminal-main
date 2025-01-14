@@ -1,26 +1,15 @@
 package org.fyp24064.im.model;
 
-
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
 import lombok.*;
 
-
 @Getter
+@Setter
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
+@Entity
 public class ChatMessage {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer messageId;
-
-    @Setter(value = AccessLevel.PRIVATE)
-    @Column(nullable = false)
-    private String messageContent;
-
-    @Setter(value = AccessLevel.PRIVATE)
-    @Column(nullable = false)
-    private String messageSender;
-
-    private String messageChannel;
-
+    private String content;
+    private int roomId;
+    private String sender;
 }
