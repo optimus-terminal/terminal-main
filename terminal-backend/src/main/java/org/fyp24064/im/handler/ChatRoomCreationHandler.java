@@ -1,5 +1,6 @@
 package org.fyp24064.im.handler;
 
+import org.fyp24064.im.model.ChatRoom;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 
@@ -9,7 +10,7 @@ public class ChatRoomCreationHandler implements StompFrameHandler {
 
     @Override
     public Type getPayloadType(StompHeaders headers) {
-        return null;
+        return ChatRoom.class;
     }
 
     @Override

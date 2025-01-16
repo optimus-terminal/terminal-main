@@ -15,6 +15,7 @@ public class ConnectionSessionHandler extends StompSessionHandlerAdapter {
         If we need to subscribe to multiple paths, then our handler can be different for different POJOs
          */
         session.subscribe("/subscribe/chat/messages/user1", new ChatMessageSubscriptionHandler());
+        // TODO: Validate this path in instant-messaging-server, or simply request a retrieval of chatMessage if there is an update
         session.subscribe("/subscribe/chat/creation/user1", new ChatRoomCreationHandler());
     }
 
