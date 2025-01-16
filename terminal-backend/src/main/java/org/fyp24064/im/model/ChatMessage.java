@@ -7,7 +7,6 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
 public class ChatMessage {
     private String content;
     private int roomId;
