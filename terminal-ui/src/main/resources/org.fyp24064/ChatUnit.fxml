@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.fyp24064.controllers.ChatUnitController"
+            prefHeight="20.0" prefWidth="150.0"
+
+>
+
+    <!-- Main container -->
+    <VBox style=" -fx-spacing: 0;">
+
+        <VBox style="-fx-padding: 5; -fx-spacing: 0; -fx-border-width: 0 0 1 0;">
+
+            <!-- Chat title (bold) -->
+            <Label fx:id="chatLabel"
+                   text="Chat Name"
+                   style="-fx-font-weight: bold; -fx-font-size: 14px; -fx-text-fill: #FFFFFF;" />
+        </VBox>
+    </VBox>
+
+</AnchorPane>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.fyp24064.controllers.MessageListController"
+            style="-fx-background-color: #000000;"
+> <!-- Black background for the entire AnchorPane -->
+
+    <!-- Main Vertical Layout -->
+    <VBox spacing="10.0"
+          AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0"
+          AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="0.0"
+          style="-fx-padding: 10;">
+
+        <!-- Group Name Section -->
+        <Label fx:id="groupNameLabel"
+               text="Group Name"
+               style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #ffffff; -fx-padding: 10; -fx-background-color: #000000; -fx-font-family: 'Arial';"
+              />
+
+        <!-- Scrollable Area for Messages -->
+        <ScrollPane fx:id="messageScrollPane"
+                    fitToWidth="true"
+                    style="-fx-background: transparent; -fx-padding: 10;-fx-background-color: #000000;"
+                    VBox.vgrow="ALWAYS">
+            <VBox fx:id="messageList"
+                  style="-fx-background-color: #000000; -fx-padding: 5;" />
+        </ScrollPane>
+
+        <!-- Input Bubble Section -->
+        <AnchorPane prefHeight="60.0"
+                    style="-fx-background-color: #1a1a1a; -fx-border-color: #333333; -fx-border-width: 1; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 10;">
+            <HBox spacing="10.0"
+                  AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                  AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0">
+                <TextField fx:id="messageInput"
+                           promptText="Type a message..."
+                           HBox.hgrow="ALWAYS"
+                           style="-fx-font-size: 14px; -fx-background-color: #333333; -fx-text-fill: #ffffff; -fx-border-color: #555555; -fx-border-radius: 10;" />
+                <Button fx:id="sendButton"
+                        text="Send"
+                        style="-fx-font-size: 14px; -fx-background-color: #333333; -fx-text-fill: #ffffff; -fx-border-color: #555555; -fx-border-radius: 10; -fx-padding: 5 15;" />
+            </HBox>
+        </AnchorPane>
+
+    </VBox>
+
+</AnchorPane>
