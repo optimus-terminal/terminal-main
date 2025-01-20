@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.fyp24064.im.ChatMessage;
 import org.fyp24064.im.ChatRoom;
 import org.fyp24064.im.model.CreateChatRoom;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -12,13 +11,10 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
+import static org.fyp24064.constants.IMConstants.*;
+
 @Service
 public final class IMService {
-    private static String URL_BASE = "http://localhost:8080/";
-    private static String URL_BASE_GET_MESSAGE = URL_BASE + "chat/messages/%s";
-    private static String URL_BASE_GET_ROOMS = URL_BASE + "chat/chatRoom/%s";
-    private static String URL_BASE_POST_MESSAGE = URL_BASE + "chat/message";
-    private static String URL_BASE_POST_CREATE_ROOM = URL_BASE + "chat/createRoom";
     private static RestTemplate restTemplate = new RestTemplate();
 
     public static List<ChatRoom> getChatRoomsOfUser(String userId) {
