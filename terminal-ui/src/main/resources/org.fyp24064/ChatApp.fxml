@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import java.net.URL?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.fyp24064.controllers.ChatAppController"
+            prefWidth="1000"
+            style="-fx-background-color: #006400;"
+
+>
+
+    <SplitPane fx:id="splitPane"
+               orientation="HORIZONTAL"
+               dividerPositions="0.3"
+            AnchorPane.topAnchor="0.0"
+            AnchorPane.leftAnchor="0.0"
+            AnchorPane.rightAnchor="0.0"
+            AnchorPane.bottomAnchor="0.0"
+    >
+
+    </SplitPane>
+
+</AnchorPane>

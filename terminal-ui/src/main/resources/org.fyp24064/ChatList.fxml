@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.fyp24064.controllers.ChatListController"
+            prefHeight="700"
+            style="-fx-background-color: #006400;"
+>
+    <VBox spacing="10.0"
+          AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0"
+          AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="0.0"
+          style="-fx-pref-width: Infinity;"
+    >
+
+        <Label fx:id="chatNameLabel"
+               style="-fx-font-size: 22px; -fx-font-family: Roboto-Medium ;-fx-font-weight: bold; -fx-padding: 20 20 10 20; -fx-background-color: #006400;" />
+
+        <Separator style="-fx-background-color: lightgrey; -fx-pref-height: 0.1; -fx-pref-width: Infinity;" />
+
+        <Label
+                fx:id="channelLabel"
+                text="Channels"
+               style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-padding: 5 0 0 15; -fx-background-color: #006400;" />
+
+        <ScrollPane fx:id="chatScrollPane"
+                    fitToWidth="true"
+                    fitToHeight="true"
+                    style="-fx-padding: 10; -fx-background-color: #006400;"
+                    VBox.vgrow="ALWAYS">
+            <VBox fx:id="chatList"
+                  spacing="10.0"
+                  style="-fx-padding: 10; -fx-background-color: #006400" />
+        </ScrollPane>
+
+    </VBox>
+
+</AnchorPane>

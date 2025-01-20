@@ -16,8 +16,17 @@
         <maven.compiler.target>18</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
     <dependencies>
+        <dependency>
+            <groupId>org.fyp24064</groupId>
+            <artifactId>terminal-backend</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.fyp24064</groupId>
+            <artifactId>terminal-utils</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-base</artifactId>
@@ -30,9 +39,13 @@
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
-            <artifactId>javafx-graphics </artifactId>
+            <artifactId>javafx-graphics</artifactId>
             <version>22.0.1</version>
-
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.15.2</version> <!-- Use the latest version -->
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
@@ -63,13 +76,6 @@
             <artifactId>jfreechart</artifactId>
             <version>1.5.3</version>
         </dependency>
-      
-        <dependency>
-            <groupId>org.fyp24064</groupId>
-            <artifactId>terminal-backend</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-
         <dependency>
             <groupId>org.jfree</groupId>
             <artifactId>org.jfree.chart.fx</artifactId>
@@ -99,6 +105,10 @@
             <artifactId>lombok</artifactId>
             <version>1.18.36</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot</artifactId>
         </dependency>
 
     </dependencies>
