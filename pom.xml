@@ -14,10 +14,10 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
-        <module>terminal-core</module>
-        <module>terminal-ui</module>
-        <module>terminal-backend</module>
         <module>terminal-utils</module>
+        <module>terminal-core</module>
+        <module>terminal-backend</module>
+        <module>terminal-ui</module>
         <module>terminal-security</module>
     </modules>
 
@@ -30,10 +30,6 @@
     <build>
         <defaultGoal>install</defaultGoal>
         <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
             <plugin>
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>

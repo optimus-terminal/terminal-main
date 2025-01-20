@@ -2,7 +2,9 @@ package org.fyp24064.controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ChatUnitController {
 
     @FXML

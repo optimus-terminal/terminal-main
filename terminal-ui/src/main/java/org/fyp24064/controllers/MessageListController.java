@@ -1,9 +1,8 @@
 package org.fyp24064.controllers;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -12,20 +11,26 @@ import javafx.scene.layout.VBox;
 import javafx.scene.Node;
 import javafx.fxml.FXMLLoader;
 
-import java.awt.*;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.*;
 import java.util.List;
 import javafx.geometry.Insets;
-
 import javafx.scene.control.ScrollPane;
 
+import org.fyp24064.im.model.ChatRoom;
 import org.fyp24064.models.Message;
+import org.springframework.stereotype.Component;
 
+import org.fyp24064.im.service.IMService;
+import org.fyp24064.im.model.ChatMessage;
+import org.fyp24064.im.model.ChatRoom;
+
+
+@Component
 public class MessageListController {
+
+    private int roomId;
+    private String roomTitle;
+    private String user;
 
     @FXML
     private Label groupNameLabel;
@@ -42,80 +47,60 @@ public class MessageListController {
     @FXML
     private ScrollPane messageScrollPane; // Added reference to the ScrollPane
 
+    private IMService imService = new IMService();
+
+    private ObservableList<Message> messageObservableList = FXCollections.observableArrayList();
+
+    public ObservableList<Message> getMessageObservableList() {
+        return messageObservableList;
+    }
+
     // Initialize the controller
     @FXML
     public void initialize() {
-        // Set up the Send Button action
-        sendButton.setOnAction(event -> sendMessage());
-        //mockMessageData();
-    }
 
-    public Map<Integer, List<Message>> messageData = new HashMap<>();
+        messageObservableList.addListener((javafx.collections.ListChangeListener.Change<? extends Message> change) -> {
+            while (change.next()) {
+                if (change.wasAdded()) {
+                    for (Message newMessage : change.getAddedSubList()) {
+                        addMessageBubble(newMessage); // Add each new message to the UI
+                    }
+                }
+            }
+        });
+
+        sendButton.setOnAction(event -> sendMessage());
+    }
 
 
     public void displayMessages(int chatId) {
+
+        String username = "user4";
+        user = username;
+        roomId = chatId;
         messageList.getChildren().clear();
-        String serverIP = "http://localhost:8080";
-        String getChatRoomPath = "/chat/messages/";
-        String apiUrI = serverIP + getChatRoomPath + String.valueOf(chatId);
 
-        // TODO: HTTP Request based on chatId
+        List<ChatRoom> chatRoomList = imService.getChatRoomsOfUser(username);
+        List<ChatMessage> chatMessageList = imService.getChatMessages(chatId);
 
-        try {
-            // Send HTTP Request
-            HttpClient client = HttpClient.newHttpClient();
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(apiUrI))
-                    .GET()
-                    .build();
+        for (ChatRoom chatRoom : chatRoomList) {
 
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-            if (response.statusCode() == 200) {
-
-                String responseBody = response.body();
-
-                // Parse the JSON response into a JsonNode tree
-                ObjectMapper mapper = new ObjectMapper();
-                JsonNode rootNode = mapper.readTree(responseBody);
-
-                // Create a list to hold the Message objects
-                List<Message> messages = new ArrayList<>();
-
-                // Loop over each JSON object in the array
-                for (JsonNode node : rootNode) {
-
-                    String sender = node.get("sender").asText();
-                    String text = node.get("content").asText();
-
-                    messages.add(new Message(sender, null, text)); // Pass null for "time" if you don't have it
-                }
-
-                if (!messages.isEmpty()) {
-                    // Set the group name dynamically
-                    groupNameLabel.setText("Chat " + chatId);
-
-                    // Add all messages to the UI
-                    for (Message message : messages) {
-                        addMessageBubble(message);
-                    }
-                    scrollToBottom();
-                } else {
-                    groupNameLabel.setText("No Messages");
-                }
-            } else {
-                System.err.println("Failed to fetch chat messages: HTTP " + response.statusCode());
-                groupNameLabel.setText("Error: Could not load messages");
+            if (chatRoom.getRoomId() == chatId){
+                roomTitle = chatRoom.getRoomTitle();
+                groupNameLabel.setText(roomTitle);
+                break;
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println("Error fetching chat messages: " + e.getMessage());
-            groupNameLabel.setText("Error: Could not load messages");
         }
+        for (ChatMessage chatMessage : chatMessageList) {
 
+            String message = chatMessage.getContent();
+            String sender = chatMessage.getSender();
+            addMessageBubble(new Message(sender, message));
+        }
+        scrollToBottom();
     }
 
-    // Add a message bubble to the list
+
     private void addMessageBubble(Message message) {
         try {
             // Load the MessageBubble.fxml
@@ -137,21 +122,29 @@ public class MessageListController {
         }
     }
 
-    // Handle sending a new message
+
     private void sendMessage() {
+
         String text = messageInput.getText();
+
         if (text == null || text.isEmpty()) {
             return; // Ignore empty messages
         }
+        try{
+            imService.sendMessageToRoom(text, roomId, user);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            System.out.println("Failed to send the message. Please try again.");
+        }
 
-        // Add the message to the UI (as if it were sent by the user)
-        Message newMessage = new Message("You", getCurrentTime(), text);
+
+        Message newMessage = new Message("You", text);
         addMessageBubble(newMessage);
 
         // Clear the input field
         messageInput.clear();
         scrollToBottom();
-        // MessageService.saveMessage(newMessage);
     }
 
     // Get the current time as a string

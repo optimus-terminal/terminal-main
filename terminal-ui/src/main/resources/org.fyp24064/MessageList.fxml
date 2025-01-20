@@ -15,7 +15,7 @@
           AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="0.0"
           style="-fx-padding: 10;">
 
-        <!-- Group Name Section -->
+
         <Label fx:id="groupNameLabel"
                text="Group Name"
                style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #ffffff; -fx-padding: 10; -fx-background-color: #000000; -fx-font-family: 'Arial';"
