@@ -12,8 +12,13 @@ public class ChatAppController {
     @FXML
     private SplitPane splitPane;
 
+    private String username;
     private ChatListController chatListController;
     private MessageListController messageListController;
+
+    public void setUser(String username){
+        this.username = username;
+    }
 
     @FXML
     private void initialize() {
@@ -23,10 +28,12 @@ public class ChatAppController {
             AnchorPane chatListPane = chatListLoader.load();
             chatListController = chatListLoader.getController();
 
+
             // Load MessageList.fxml and get its controller
             FXMLLoader messageListLoader = new FXMLLoader(getClass().getResource("/org.fyp24064/MessageList.fxml"));
             AnchorPane messageListPane = messageListLoader.load();
             messageListController = messageListLoader.getController();
+
 
             splitPane.getItems().addAll(chatListPane, messageListPane);
 

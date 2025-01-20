@@ -14,9 +14,6 @@ public class MessageBubbleController {
     @FXML
     private Label messageLabel;
 
-    // Assume that all data has been fetched from the postgre database in the MessageListController
-    // MessageListController will pass in details to MessageBubbleController for creation
-
     // Method to set sender's name
     public void setSender(String name) {
         senderLabel.setText(name);

@@ -16,13 +16,15 @@ import java.util.List;
 import javafx.geometry.Insets;
 import javafx.scene.control.ScrollPane;
 
-import org.fyp24064.im.model.ChatRoom;
+import org.fyp24064.im.ChatMessage;
+import org.fyp24064.im.ChatRoom;
 import org.fyp24064.models.Message;
+import org.fyp24064.userData.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.fyp24064.initializers.WebSocketInitializer;
 
 import org.fyp24064.im.service.IMService;
-import org.fyp24064.im.model.ChatMessage;
-import org.fyp24064.im.model.ChatRoom;
 
 
 @Component
@@ -30,7 +32,7 @@ public class MessageListController {
 
     private int roomId;
     private String roomTitle;
-    private String user;
+    private String username;
 
     @FXML
     private Label groupNameLabel;
@@ -51,13 +53,25 @@ public class MessageListController {
 
     private ObservableList<Message> messageObservableList = FXCollections.observableArrayList();
 
+    private WebSocketInitializer webSocInitializer = new WebSocketInitializer();;
+
     public ObservableList<Message> getMessageObservableList() {
         return messageObservableList;
     }
 
+    private User user;
+
+    @Autowired
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+
     // Initialize the controller
     @FXML
     public void initialize() {
+
+        this.username = "user4";
 
         messageObservableList.addListener((javafx.collections.ListChangeListener.Change<? extends Message> change) -> {
             while (change.next()) {
@@ -68,20 +82,20 @@ public class MessageListController {
                 }
             }
         });
-
         sendButton.setOnAction(event -> sendMessage());
+
+        // Start the WebSocket Communication
+        webSocInitializer.initializeWebSocket(messageObservableList, username);
     }
 
 
     public void displayMessages(int chatId) {
 
-        String username = "user4";
-        user = username;
         roomId = chatId;
         messageList.getChildren().clear();
 
-        List<ChatRoom> chatRoomList = imService.getChatRoomsOfUser(username);
-        List<ChatMessage> chatMessageList = imService.getChatMessages(chatId);
+        List<org.fyp24064.im.ChatRoom> chatRoomList = imService.getChatRoomsOfUser(username);
+        List<org.fyp24064.im.ChatMessage> chatMessageList = imService.getChatMessages(chatId);
 
         for (ChatRoom chatRoom : chatRoomList) {
 
@@ -131,7 +145,7 @@ public class MessageListController {
             return; // Ignore empty messages
         }
         try{
-            imService.sendMessageToRoom(text, roomId, user);
+            imService.sendMessageToRoom(text, roomId, username);
         }
         catch(Exception e){
             e.printStackTrace();

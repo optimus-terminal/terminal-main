@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.fyp24064.controllers.ChatAppController;
+import org.fyp24064.userData.User;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,11 +14,13 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.fyp24064.im.config.IMConfig;
 
 import java.util.Objects;
+import java.util.Scanner;
 
 @SpringBootApplication(scanBasePackages = "org.fyp24064")
 public class Main extends Application{
 
     private ConfigurableApplicationContext springContext;
+    private static String username; // Store the username
 
     @Override
     public void init() throws Exception {
@@ -27,8 +30,16 @@ public class Main extends Application{
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        System.out.println(123);
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter your username: ");
+        username = scanner.nextLine().trim();
+
+        //User user = springContext.getBean(User.class);
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org.fyp24064/ChatApp.fxml"));
+        //loader.setControllerFactory(springContext::getBean);
+
         Scene scene = new Scene(loader.load());
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/org.fyp24064/styles.css")).toExternalForm());
 
@@ -46,5 +57,6 @@ public class Main extends Application{
 
     public static void main(String[] args) {
         launch(args);
+        Tabs.run(args);
     }
 }

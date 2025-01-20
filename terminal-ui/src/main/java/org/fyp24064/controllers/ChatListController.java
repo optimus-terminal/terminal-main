@@ -11,8 +11,10 @@ import java.io.IOException;
 import java.util.*;
 import java.util.function.Consumer;
 
+import org.fyp24064.im.ChatRoom;
 import org.fyp24064.im.service.IMService;
-import org.fyp24064.im.model.ChatRoom;
+import org.fyp24064.userData.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 
@@ -25,13 +27,20 @@ public class ChatListController {
     private VBox chatList;
 
     @FXML
-    private Label chatNameLabel; // Label to display the username
+    private Label chatNameLabel;
 
     private IMService imService = new IMService();
 
-
+    private String username;
     private Consumer<Integer> onChatSelected;
     private AnchorPane selectedChatUnit;
+
+    private User user;
+
+    @Autowired
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public void setOnChatSelected(Consumer<Integer> onChatSelected) {
         this.onChatSelected = onChatSelected;
@@ -40,10 +49,11 @@ public class ChatListController {
     @FXML
     private void initialize() {
 
-        String username = "user4";
+        //this.username = user.getUsername();
+        this.username = "user4";
         chatNameLabel.setText(username);
 
-        List<ChatRoom> chatRoomList = imService.getChatRoomsOfUser(username);
+        List<org.fyp24064.im.ChatRoom> chatRoomList = imService.getChatRoomsOfUser(username);
 
         for (ChatRoom chatRoom : chatRoomList) {
 

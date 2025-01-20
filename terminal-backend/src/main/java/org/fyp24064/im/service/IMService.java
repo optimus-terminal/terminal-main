@@ -1,10 +1,9 @@
 package org.fyp24064.im.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.fyp24064.im.model.ChatMessage;
-import org.fyp24064.im.model.ChatRoom;
+import org.fyp24064.im.ChatMessage;
+import org.fyp24064.im.ChatRoom;
 import org.fyp24064.im.model.CreateChatRoom;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -12,17 +11,13 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
+import static org.fyp24064.constants.IMConstants.*;
+
 @Service
-public class IMService {
-    private static String URL_BASE = "http://localhost:8080/";
-    private static String URL_BASE_GET_MESSAGE = URL_BASE + "chat/messages/%s";
-    private static String URL_BASE_GET_ROOMS = URL_BASE + "chat/chatRoom/%s";
-    private static String URL_BASE_POST_MESSAGE = URL_BASE + "chat/message";
-    private static String URL_BASE_POST_CREATE_ROOM = URL_BASE + "chat/createRoom";
+public final class IMService {
+    private static RestTemplate restTemplate = new RestTemplate();
 
-    private RestTemplate restTemplate = new RestTemplate();
-
-    public List<ChatRoom> getChatRoomsOfUser(String userId) {
+    public static List<ChatRoom> getChatRoomsOfUser(String userId) {
         String URL = String.format(URL_BASE_GET_ROOMS, userId);
         ResponseEntity<List<ChatRoom>> messageResponseEntity = restTemplate.exchange(
                 URL,
@@ -33,7 +28,7 @@ public class IMService {
         return messageResponseEntity.getBody();
     }
 
-    public List<ChatMessage> getChatMessages(int roomId) {
+    public static List<ChatMessage> getChatMessages(int roomId) {
         /*
         Reason for ParameterizedTypeReference is used, is because at runtime Java does not know
         the type of the generic class (List is declared as List<T>, which T is a generic type, so
@@ -54,7 +49,7 @@ public class IMService {
         return messageResponseEntity.getBody();
     }
 
-    public void sendMessageToRoom(String content, int roomId, String sender) throws Exception{
+    public static void sendMessageToRoom(String content, int roomId, String sender) throws Exception{
         ChatMessage chatMessage = new ChatMessage(content, roomId, sender);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -68,7 +63,7 @@ public class IMService {
         );
     }
 
-    public void sendCreateRoomRequest(String roomTitle, List<String> members) throws Exception{
+    public static void sendCreateRoomRequest(String roomTitle, List<String> members) throws Exception{
         CreateChatRoom chatRoom = new CreateChatRoom(roomTitle, members);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -81,5 +76,4 @@ public class IMService {
                 new ParameterizedTypeReference<String>() {}
         );
     }
-
 }
