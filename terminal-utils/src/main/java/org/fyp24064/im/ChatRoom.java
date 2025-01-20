@@ -1,7 +1,8 @@
-package org.fyp24064.im.model;
+package org.fyp24064.im;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.fyp24064.im.ChatMessage;
 
 import java.io.Serializable;
 import java.util.List;

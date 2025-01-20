@@ -1,6 +1,6 @@
 package org.fyp24064.im.handler;
 
-import org.fyp24064.im.model.ChatMessage;
+import org.fyp24064.im.ChatMessage;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 
@@ -19,6 +19,5 @@ public class ChatMessageSubscriptionHandler implements StompFrameHandler {
         System.out.println(message.getContent());
         System.out.println(message.getSender());
         System.out.println(message.getRoomId());
-
     }
 }
