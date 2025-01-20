@@ -1,0 +1,44 @@
+.button {
+    -fx-background-color: #424242;
+    -fx-text-fill: white;
+}
+
+.combo-box {
+    -fx-background-color: #424242;
+    -fx-text-fill: white;
+}
+
+.input {
+    -fx-background-color: #424242;
+    -fx-pref-width: 5000;
+    -fx-text-fill: white;
+}
+
+.label {
+    -fx-text-fill: white;
+}
+
+.entry {
+    -fx-background-color: #333333;
+    -fx-padding: 5;
+    -fx-fill-width: true;
+}
+
+.news-content {
+    -fx-background-color: #424242;
+    -fx-text-fill: white;
+    -fx-wrap-text: true;
+    -fx-padding: 5;
+}
+
+.pane {
+    -fx-background-color: #333333;
+    -fx-alignment: center;
+    -fx-fill-width: true;
+    -fx-padding: 5;
+}
+
+.tab {
+    -fx-background-color: #424242;
+    -fx-text-base-color: white;
+}
