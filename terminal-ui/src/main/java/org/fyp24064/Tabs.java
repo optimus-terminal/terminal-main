@@ -11,6 +11,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import com.panemu.tiwulfx.control.dock.DetachableTabPane;
+import org.fyp24064.dashboard.model.BarChart;
+import org.fyp24064.dashboard.model.CandlestickChart;
+import org.fyp24064.dashboard.model.LineChart;
 
 public class Tabs extends Application {
     private DetachableTabPane tabPane;
@@ -52,18 +55,20 @@ public class Tabs extends Application {
     private void addTab(String[] args) {
         String tabName;
         Node tabContent;
+        String command;
+        String arg = null;
+        String MAPeriod = null;
 
-        if ((args.length < 2 || args.length > 3
-                || (args.length == 3 && !args[2].matches("\\d+")))
-                && (!args[0].equals("im"))
-        ) {
+        if (args[0].equals("im")) {
+            command = "im";
+        } else if ((args.length < 2 || args.length > 3 || (args.length == 3 && !args[2].matches("\\d+")))) {
             input.selectAll();
             return;
+        } else {
+            command = args[0].toLowerCase();
+            arg = args[1].toUpperCase();
+            MAPeriod = (args.length == 3)? args[2] : null;
         }
-
-        String command = args[0].toLowerCase();
-        String arg = args[1].toUpperCase();
-        String MAPeriod = (args.length == 3)? args[2] : null;
 
         switch (command) {
             case "line":
@@ -89,7 +94,7 @@ public class Tabs extends Application {
                 tabContent = new BarChart().constructNode(new String[] {arg});
                 break;
             case "im":
-                tabName = "IM: " + arg;
+                tabName = "IM Placeholder";
                 tabContent = new Text("Instant Messaging Placeholder");
                 break;
             case "news":

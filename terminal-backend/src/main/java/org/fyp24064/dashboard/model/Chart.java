@@ -1,13 +1,13 @@
-package org.fyp24064;
+package org.fyp24064.dashboard.model;
 
 import javafx.scene.Node;
+import org.fyp24064.dashboard.service.StockService;
 import org.jfree.chart.*;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.time.Second;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.xy.XYDataset;
-import org.fyp24064.StockData.HistoricalQuote;
 
 public abstract class Chart {
     protected StockService stockService = new StockService();
@@ -45,7 +45,6 @@ public abstract class Chart {
             }
             collection.addSeries(series);
         } catch (Exception e) {
-//            e.printStackTrace();
             return null;
         }
 

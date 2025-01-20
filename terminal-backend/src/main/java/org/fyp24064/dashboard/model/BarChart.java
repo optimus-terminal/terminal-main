@@ -1,4 +1,4 @@
-package org.fyp24064;
+package org.fyp24064.dashboard.model;
 
 import javafx.scene.layout.BorderPane;
 import org.jfree.chart.*;
@@ -15,7 +15,7 @@ public class BarChart extends Chart {
     private IntervalXYDataset dataset_bar;
 
     @Override
-    protected BorderPane constructNode(String[] args) {
+    public BorderPane constructNode(String[] args) {
         String stock = args[0];
         dataset_bar = createDataset(stock, "1y");
         if (dataset_bar == null) {
@@ -45,18 +45,17 @@ public class BarChart extends Chart {
         TimeSeries series = new TimeSeries("Stock Volume", "Date", "Volume");
         
         try {
-            List<StockData.HistoricalQuote> data = stockService.getQuotes(stock, period);
+            List<HistoricalQuote> data = stockService.getQuotes(stock, period);
             if (data == null) {
                 return null;
             }
-            for (StockData.HistoricalQuote quote : data) {
+            for (HistoricalQuote quote : data) {
                 series.addOrUpdate(
                         new Second(quote.getDate()),
                         quote.getVolume()
                 );
             }
         } catch (Exception e) {
-//            e.printStackTrace();
             return null;
         }
         return new TimeSeriesCollection(series);

@@ -1,4 +1,4 @@
-package org.fyp24064;
+package org.fyp24064.dashboard.model;
 
 import javafx.scene.layout.BorderPane;
 import org.jfree.chart.*;
@@ -20,7 +20,7 @@ public class CandlestickChart extends Chart {
     private OHLCDataset dataset_OHLC;
 
     @Override
-    protected BorderPane constructNode(String[] args) {
+    public BorderPane constructNode(String[] args) {
         String stock = args[0];
         MAPeriod = (args.length > 1) ? args[1] : "0";
         dataset_OHLC = createDataset(stock, "1y");
@@ -61,11 +61,11 @@ public class CandlestickChart extends Chart {
         OHLCSeries series = new OHLCSeries("Stock OHLC");
 
         try {
-            List<StockData.HistoricalQuote> data = stockService.getQuotes(stock, period);
+            List<HistoricalQuote> data = stockService.getQuotes(stock, period);
             if (data == null) {
                 return null;
             }
-            for (StockData.HistoricalQuote quote : data) {
+            for (HistoricalQuote quote : data) {
                 series.add(
                         new Second(quote.getDate()),
                         quote.getOpen(),
@@ -76,7 +76,6 @@ public class CandlestickChart extends Chart {
             }
             collection.addSeries(series);
         } catch (Exception e) {
-//            e.printStackTrace();
             return null;
         }
         return collection;

@@ -1,8 +1,7 @@
-package org.fyp24064;
+package org.fyp24064.dashboard.model;
 
 import javafx.scene.layout.BorderPane;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.JFreeChart;
+import org.jfree.chart.*;
 import org.jfree.chart.fx.ChartViewer;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.StandardXYItemRenderer;
@@ -14,7 +13,7 @@ public class LineChart extends Chart {
     private XYDataset dataset_Closed;
 
     @Override
-    protected BorderPane constructNode(String[] args) {
+    public BorderPane constructNode(String[] args) {
         String stock = args[0];
         MAPeriod = (args.length > 1) ? args[1] : "0";
         dataset_Closed = createClosedDataset(stock, "1y");

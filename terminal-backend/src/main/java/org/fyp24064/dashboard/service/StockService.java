@@ -1,7 +1,11 @@
-package org.fyp24064;
+package org.fyp24064.dashboard.service;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
+import org.fyp24064.dashboard.model.StockData;
+import org.fyp24064.dashboard.model.StockNews;
+import org.fyp24064.dashboard.model.HistoricalQuote;
+import org.fyp24064.dashboard.model.StockNewsResult;
 import org.apache.hc.client5.http.classic.methods.HttpPost;
 import org.apache.hc.client5.http.fluent.Request;
 import org.apache.hc.client5.http.fluent.Response;
@@ -23,7 +27,7 @@ public class StockService {
         this.data = new StockData();
     }
 
-    public List<StockData.HistoricalQuote> getQuotes(String stockSymbol, String period) throws Exception {
+    public List<HistoricalQuote> getQuotes(String stockSymbol, String period) throws Exception {
         String content = "";
         try {
             Response response = Request.get(String.format(STOCK_PRICE_API, stockSymbol, period)).execute();
@@ -31,17 +35,20 @@ public class StockService {
             mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
             data.setEntries(mapper.readValue(content, StockData.class).getEntries());
         } catch (Exception e) {
-//            e.printStackTrace();
             return null;
         }
         return data.getEntries();
     }
 
-    public List<StockNews.Result> getNews(String stockSymbol) throws Exception {
+    public List<StockNewsResult> getNews(String stockSymbol) throws Exception {
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
             HttpPost postRequest = new HttpPost(STOCK_NEWS_API);
 
-            String jsonBody = String.format("{\"symbol\": \"%s\", \"order\": \"desc\", \"limit\": \"10\"}", stockSymbol);
+            String jsonBody = String.format(
+                    "{\"symbol\": \"%s\", " +
+                    "\"order\": \"desc\", " +
+                    "\"limit\": \"10\"}",
+                    stockSymbol);
             StringEntity entity = new StringEntity(jsonBody);
             postRequest.setEntity(entity);
             postRequest.setHeader("Content-type", "application/json");
@@ -52,7 +59,6 @@ public class StockService {
                 return stockNews.getResults();
             });
         } catch (Exception e) {
-//            e.printStackTrace();
             return null;
         }
     }
