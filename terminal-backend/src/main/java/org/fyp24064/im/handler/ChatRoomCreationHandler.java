@@ -1,6 +1,6 @@
 package org.fyp24064.im.handler;
 
-import org.fyp24064.im.model.ChatRoom;
+import org.fyp24064.im.ChatRoom;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 

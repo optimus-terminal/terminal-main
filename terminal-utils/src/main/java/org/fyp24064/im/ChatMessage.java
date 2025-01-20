@@ -1,4 +1,4 @@
-package org.fyp24064.im.model;
+package org.fyp24064.im;
 
 import jakarta.persistence.Entity;
 import lombok.*;
