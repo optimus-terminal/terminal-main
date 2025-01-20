@@ -14,6 +14,7 @@ import java.util.function.Consumer;
 import org.fyp24064.im.ChatRoom;
 import org.fyp24064.im.service.IMService;
 import org.fyp24064.userData.User;
+import org.fyp24064.userData.UserHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
@@ -50,7 +51,7 @@ public class ChatListController {
     private void initialize() {
 
         //this.username = user.getUsername();
-        this.username = "user4";
+        username = UserHolder.getInstance().getUser().getUsername();
         chatNameLabel.setText(username);
 
         List<org.fyp24064.im.ChatRoom> chatRoomList = imService.getChatRoomsOfUser(username);

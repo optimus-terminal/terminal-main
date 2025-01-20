@@ -7,6 +7,7 @@ import javafx.stage.Stage;
 import org.fyp24064.controllers.ChatAppController;
 import org.fyp24064.userData.User;
 
+import org.fyp24064.userData.UserHolder;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -35,10 +36,11 @@ public class Main extends Application{
         System.out.print("Enter your username: ");
         username = scanner.nextLine().trim();
 
-        //User user = springContext.getBean(User.class);
+        User user = new User();
+        user.setUsername(username);
+        UserHolder.getInstance().setUser(user);
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org.fyp24064/ChatApp.fxml"));
-        //loader.setControllerFactory(springContext::getBean);
 
         Scene scene = new Scene(loader.load());
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/org.fyp24064/styles.css")).toExternalForm());

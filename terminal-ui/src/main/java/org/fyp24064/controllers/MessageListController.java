@@ -20,6 +20,7 @@ import org.fyp24064.im.ChatMessage;
 import org.fyp24064.im.ChatRoom;
 import org.fyp24064.models.Message;
 import org.fyp24064.userData.User;
+import org.fyp24064.userData.UserHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.fyp24064.initializers.WebSocketInitializer;
@@ -59,19 +60,11 @@ public class MessageListController {
         return messageObservableList;
     }
 
-    private User user;
-
-    @Autowired
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-
     // Initialize the controller
     @FXML
     public void initialize() {
 
-        this.username = "user4";
+        username = UserHolder.getInstance().getUser().getUsername();
 
         messageObservableList.addListener((javafx.collections.ListChangeListener.Change<? extends Message> change) -> {
             while (change.next()) {
@@ -151,10 +144,6 @@ public class MessageListController {
             e.printStackTrace();
             System.out.println("Failed to send the message. Please try again.");
         }
-
-
-        Message newMessage = new Message("You", text);
-        addMessageBubble(newMessage);
 
         // Clear the input field
         messageInput.clear();
