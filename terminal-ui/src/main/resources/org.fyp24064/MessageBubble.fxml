@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.fyp24064.controllers.MessageBubbleController"
+>
+
+    <!-- Message bubble container -->
+    <VBox spacing="8.0">
+
+        <!-- Header container for sender and time -->
+        <HBox alignment="CENTER_LEFT" spacing="5.0">
+            <!-- Sender's Name -->
+            <Label fx:id="senderLabel"
+                   text="Sender's Name"
+                   style="-fx-font-weight: bold; -fx-font-size: 14px; -fx-text-fill: white; -fx-font-family: 'Arial';" />
+
+            <!-- Time Sent (next to sender's name) -->
+        </HBox>
+
+        <!-- Message Text -->
+        <Label fx:id="messageLabel"
+               wrapText="true"
+               style="-fx-font-family: 'Roboto-Regular'; -fx-font-size: 13px; -fx-padding: 5;"
+
+               maxWidth="700.0"
+               VBox.vgrow="ALWAYS" />
+    </VBox>
+</AnchorPane>

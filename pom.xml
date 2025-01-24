@@ -14,10 +14,10 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
-        <module>terminal-core</module>
-        <module>terminal-ui</module>
-        <module>terminal-backend</module>
         <module>terminal-utils</module>
+        <module>terminal-core</module>
+        <module>terminal-backend</module>
+        <module>terminal-ui</module>
         <module>terminal-security</module>
     </modules>
 

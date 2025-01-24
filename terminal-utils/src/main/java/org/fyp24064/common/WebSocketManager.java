@@ -39,7 +39,7 @@ public class WebSocketManager {
         subscriptionPaths.put(path, handler);
     }
 
-    private WebSocketManager() {
+    public WebSocketManager() {
 
     }
 
